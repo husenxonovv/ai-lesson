@@ -1,16 +1,7 @@
-# Katta sarlavha
-## Kichik sarlavha
-**qalin matn**
-*qiya matn*
-[havola qoyish]
+## GitHub is a popular website for programmers and developers.
 
-- royxat elemnt
-  # AI lesson
+It helps people create, save, and share their code online.
 
-  ## It is interesting
+GitHub uses a tool called Git. Git helps developers keep track of changes in their code.
 
-  **I Love playing compyuter games**
-  *I love kompyuter games and cs2 cs 1.6*
-
-
-  [https://github.com/husenxonovv/ai-lesson/edit/main/README.md]
+For example, if a developer changes something and makes a mistake, they can go back to an older version##
