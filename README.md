@@ -1,2 +1,5 @@
-# ai-lesson
-it is created for AI project at school
+# Katta sarlavha
+## Kichik sarlavha
+**qalin matn**
+*qiya matn*
+[havola qoyish]
