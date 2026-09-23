@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Men haqimda — Aziz Rahimov</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="nav-name">Husenxonov Saidxon</a>
+    <button class="nav-toggle" aria-label="Menyuni ochish" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links">
+      <li><a href="index.html">Bosh sahifa</a></li>
+      <li><a href="about.html">Men haqimda</a></li>
+      <li><a href="projects.html">Loyihalar</a></li>
+      <li><a href="contact.html">Aloqa</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="wrap">
+    <p class="eyebrow">Men haqimda</p>
+    <h2 style="font-size:clamp(30px,5vw,44px); max-width: 16ch;">Salom, men Saidxon — web dasturchiman.</h2>
+
+    <div class="about-layout" style="margin-top: 36px;">
+
+      <!--
+        Bitta katta rasm shu yerda.
+        Hozircha rasm o'rnida chizma (placeholder) turibti.
+        O'z rasmingizni qo'yish uchun:
+        1) rasm faylini img/ papkasiga "profile.jpg" nomi bilan joylang
+        2) pastdagi src="img/profile-placeholder.svg" ni src="img/profile.jpg" ga almashtiring
+      -->
+      <figure class="about-photo">
+        <img src="photo_2025-12-28_20-04-20.jpg" alt="Husenxonov Saidxonning surati">
+        <figcaption>Husenxonov Saidxon· Toshkent</figcaption>
+      </figure>
+
+      <div>
+        <p class="lede" style="font-size:17px;">
+          3 yildan beri web dasturlash bilan shug'ullanaman. Ishimni oddiy,
+          tushunarli va odamlar uchun qulay qilishga harakat qilaman — ortiqcha
+          murakkablikdan qochib, aniq natijaga e'tibor beraman.
+        </p>
+        <p>
+          Frontendda foydalanuvchi tajribasi, backendda esa tizimning
+          barqarorligi meni qiziqtiradi. Yangi texnologiyalarni o'rganishni
+          va real muammolarni hal qiluvchi loyihalar ustida ishlashni
+          yoqtiraman.
+        </p>
+        <p>
+          Ish vaqtimdan tashqari kitob o'qiyman, shaxmat o'ynayman va
+          ochiq kodli loyihalarga hissa qo'shishga harakat qilaman.
+        </p>
+
+        <h3 style="margin-top:32px;">Tajriba</h3>
+        <ul class="timeline">
+          <li>
+            <time>2024 — hozir</time>
+            <div>
+              <strong>Frontend dasturchi</strong><br>
+              <span class="muted">Frilanser sifatida mijozlar uchun veb-saytlar va ilovalar yarataman.</span>
+            </div>
+          </li>
+          <li>
+            <time>2022 — 2024</time>
+            <div>
+              <strong>Junior dasturchi</strong><br>
+              <span class="muted">Mahalliy IT-kompaniyada veb-ilovalar ustida jamoada ishladim.</span>
+            </div>
+          </li>
+          <li>
+            <time>2021</time>
+            <div>
+              <strong>Dasturlashni o'rgandim</strong><br>
+              <span class="muted">HTML, CSS, JavaScript asoslarini mustaqil o'rgandim.</span>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>© 2026 Husenxonov Saidxon</span>
+  <span>Toshkent, O'zbekiston</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
