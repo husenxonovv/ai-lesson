@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA — Kreativ 3D Studiya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;1,9..144,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0d1210;
+    --bg-soft: #121a17;
+    --panel: #17211d;
+    --line: #26332d;
+    --ink: #eef2ed;
+    --ink-dim: #9db3a8;
+    --accent: #ffb454;
+    --accent-dim: #b8813a;
+    --teal: #4fd1ae;
+  }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Space Grotesk', sans-serif;
+    overflow-x:hidden;
+    cursor:none;
+  }
+  ::selection{ background: var(--accent); color:#141a17; }
+
+  /* Custom cursor */
+  #cursor{
+    position:fixed; top:0; left:0; width:18px; height:18px;
+    border:1px solid var(--accent); border-radius:50%;
+    pointer-events:none; z-index:9999; transform:translate(-50%,-50%);
+    transition: width .2s, height .2s, background .2s, border-color .2s;
+    mix-blend-mode:difference;
+  }
+  #cursor.hover{ width:46px; height:46px; background:var(--accent); border-color:transparent; }
+  @media (hover:none){ #cursor{ display:none; } body{ cursor:auto; } }
+
+  canvas#bg-canvas{
+    position:fixed; inset:0; width:100%; height:100%; z-index:0;
+  }
+
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 28px 6vw;
+    mix-blend-mode: difference;
+  }
+  .logo{
+    font-family:'Fraunces', serif; font-weight:600; font-size:1.4rem;
+    letter-spacing:0.02em; color:var(--ink);
+  }
+  nav{ display:flex; gap:2.4rem; }
+  nav a{
+    color:var(--ink); text-decoration:none; font-size:0.95rem;
+    position:relative; padding-bottom:2px;
+  }
+  nav a::after{
+    content:''; position:absolute; left:0; bottom:0; width:0; height:1px;
+    background:var(--ink); transition:width .3s ease;
+  }
+  nav a:hover::after{ width:100%; }
+
+  main{ position:relative; z-index:2; }
+
+  section{
+    min-height:100vh;
+    padding: 0 6vw;
+    display:flex; flex-direction:column; justify-content:center;
+    position:relative;
+  }
+
+  .hero{
+    align-items:flex-start;
+  }
+  .kicker{
+    color:var(--teal); font-size:0.9rem; letter-spacing:0.04em;
+    margin-bottom:1.4rem; opacity:0; transform:translateY(14px);
+    animation: rise .9s ease forwards .2s;
+  }
+  h1.title{
+    font-family:'Fraunces', serif; font-weight:500;
+    font-size: clamp(2.6rem, 7vw, 6.2rem);
+    line-height:1.02; max-width:14ch;
+    opacity:0; transform:translateY(24px);
+    animation: rise 1s ease forwards .4s;
+  }
+  h1.title em{ font-style:italic; color:var(--accent); font-weight:300; }
+  .sub{
+    margin-top:1.8rem; max-width:46ch; color:var(--ink-dim);
+    font-size:1.05rem; line-height:1.6;
+    opacity:0; transform:translateY(20px);
+    animation: rise 1s ease forwards .65s;
+  }
+  .hero-actions{
+    margin-top:2.6rem; display:flex; gap:1rem; align-items:center;
+    opacity:0; transform:translateY(20px);
+    animation: rise 1s ease forwards .85s;
+  }
+  .btn{
+    font-family:'Space Grotesk', sans-serif; font-weight:600;
+    background:var(--accent); color:#161b18; border:none;
+    padding:0.95rem 1.8rem; border-radius:100px; font-size:0.95rem;
+    cursor:none; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s;
+  }
+  .btn:hover{ transform:translateY(-3px); box-shadow:0 12px 30px -8px rgba(255,180,84,0.5); }
+  .btn.ghost{
+    background:transparent; color:var(--ink); border:1px solid var(--line);
+  }
+  .btn.ghost:hover{ border-color:var(--ink); transform:translateY(-3px); }
+
+  @keyframes rise{ to{ opacity:1; transform:translateY(0); } }
+
+  .scroll-cue{
+    position:absolute; bottom:40px; left:6vw; display:flex; align-items:center; gap:.6rem;
+    color:var(--ink-dim); font-size:0.8rem; letter-spacing:0.03em;
+  }
+  .scroll-line{ width:1px; height:36px; background:var(--line); position:relative; overflow:hidden; }
+  .scroll-line::after{
+    content:''; position:absolute; top:-100%; left:0; width:100%; height:100%;
+    background:var(--accent); animation:scrollmove 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollmove{ 0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; } }
+
+  /* Reveal-on-scroll */
+  .reveal{
+    opacity:0; transform:translateY(40px);
+    transition: opacity .9s cubic-bezier(.2,.7,.1,1), transform .9s cubic-bezier(.2,.7,.1,1);
+  }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  .section-label{
+    font-size:0.85rem; color:var(--teal); margin-bottom:1rem; letter-spacing:.03em;
+  }
+  h2{
+    font-family:'Fraunces', serif; font-weight:500;
+    font-size:clamp(2rem, 4.5vw, 3.4rem); max-width:16ch; line-height:1.1;
+  }
+
+  .about{ align-items:flex-start; }
+  .about-grid{
+    display:grid; grid-template-columns: 1.1fr 0.9fr; gap:4rem; margin-top:3rem; width:100%;
+    align-items:start;
+  }
+  .about-grid p{ color:var(--ink-dim); line-height:1.75; font-size:1.05rem; }
+  .stat-list{ display:flex; flex-direction:column; gap:1.6rem; }
+  .stat{ border-top:1px solid var(--line); padding-top:1rem; }
+  .stat .num{ font-family:'Fraunces', serif; font-size:2.4rem; color:var(--accent); }
+  .stat .label{ color:var(--ink-dim); font-size:0.9rem; margin-top:.2rem; }
+
+  @media (max-width: 760px){
+    .about-grid{ grid-template-columns:1fr; gap:2.2rem; }
+  }
+
+  .work{ align-items:flex-start; padding-top:8vh; padding-bottom:8vh; }
+  .work-list{ width:100%; margin-top:3rem; display:flex; flex-direction:column; }
+  .work-item{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 2rem 0; border-top:1px solid var(--line);
+    cursor:none; transition: padding-left .4s ease;
+  }
+  .work-list .work-item:last-child{ border-bottom:1px solid var(--line); }
+  .work-item:hover{ padding-left:1.2rem; }
+  .work-item .wname{
+    font-family:'Fraunces', serif; font-size:clamp(1.4rem, 3vw, 2.2rem); font-weight:500;
+  }
+  .work-item .wmeta{ display:flex; gap:2rem; align-items:center; color:var(--ink-dim); font-size:0.9rem; }
+  .work-item .arrow{
+    display:inline-block; transition: transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .work-item:hover .arrow{ transform: translateX(6px) rotate(-45deg); }
+
+  .contact{
+    align-items:flex-start; justify-content:center;
+  }
+  .contact h2{ max-width:none; }
+  .contact-row{
+    margin-top:2.2rem; display:flex; gap:1.4rem; flex-wrap:wrap;
+  }
+  .contact a.link{
+    color:var(--ink-dim); text-decoration:none; font-size:1rem;
+    border-bottom:1px solid var(--line); padding-bottom:2px;
+    transition:color .3s, border-color .3s;
+  }
+  .contact a.link:hover{ color:var(--ink); border-color:var(--ink); }
+
+  footer{
+    position:relative; z-index:2; padding:2.4rem 6vw; display:flex;
+    justify-content:space-between; color:var(--ink-dim); font-size:0.85rem;
+    border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+<canvas id="bg-canvas"></canvas>
+
+<header>
+  <div class="logo">NOVA</div>
+  <nav>
+    <a href="#about">Biz haqimizda</a>
+    <a href="#work">Loyihalar</a>
+    <a href="#contact">Aloqa</a>
+  </nav>
+</header>
+
+<main>
+
+  <section class="hero" id="hero">
+    <div class="kicker">3D KREATIV STUDIYA — 2026</div>
+    <h1 class="title">Shakllarni <em>harakatga</em> aylantiramiz</h1>
+    <p class="sub">NOVA — brendlar uchun uch o'lchamli hikoyalar yaratuvchi studiya. Biz g'oyalarni chuqurlik, yorug'lik va harakat orqali his qilinadigan tajribaga aylantiramiz.</p>
+    <div class="hero-actions">
+      <button class="btn" onclick="document.getElementById('work').scrollIntoView()">Loyihalarni ko'rish</button>
+      <button class="btn ghost" onclick="document.getElementById('contact').scrollIntoView()">Bog'lanish</button>
+    </div>
+    <div class="scroll-cue"><div class="scroll-line"></div> Pastga suring</div>
+  </section>
+
+  <section class="about" id="about">
+    <div class="section-label">STUDIYA</div>
+    <h2 class="reveal">G'oyadan hajmga — har bir loyiha o'z jismini topadi</h2>
+    <div class="about-grid">
+      <p class="reveal">Biz dizaynerlar, 3D-rassomlar va dasturchilardan iborat kichik jamoamiz. Har bir loyihaga alohida qarab, uni raqamli makonda "yashaydigan" shaklga aylantiramiz — vebsaytlar, interaktiv installatsiyalar va marka olamlari orqali. Texnologiya biz uchun vosita, hikoya esa markaz.</p>
+      <div class="stat-list reveal">
+        <div class="stat"><div class="num">54+</div><div class="label">Yakunlangan loyihalar</div></div>
+        <div class="stat"><div class="num">12</div><div class="label">Xalqaro mukofotlar</div></div>
+        <div class="stat"><div class="num">08</div><div class="label">Yil tajriba</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="work" id="work">
+    <div class="section-label reveal">TANLANGAN ISHLAR</div>
+    <h2 class="reveal">Loyihalar</h2>
+    <div class="work-list">
+      <div class="work-item reveal">
+        <div class="wname">Aurora — Fashion Drop</div>
+        <div class="wmeta"><span>3D Web</span><span>2026</span><span class="arrow">↗</span></div>
+      </div>
+      <div class="work-item reveal">
+        <div class="wname">Kotori — Launch Site</div>
+        <div class="wmeta"><span>WebGL</span><span>2025</span><span class="arrow">↗</span></div>
+      </div>
+      <div class="work-item reveal">
+        <div class="wname">Pulse — App Experience</div>
+        <div class="wmeta"><span>Interaktiv</span><span>2025</span><span class="arrow">↗</span></div>
+      </div>
+      <div class="work-item reveal">
+        <div class="wname">Meridian — Brand World</div>
+        <div class="wmeta"><span>3D Identity</span><span>2024</span><span class="arrow">↗</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="section-label reveal">ALOQA</div>
+    <h2 class="reveal">Keyingi loyihangizni birga qurishga tayyormiz</h2>
+    <div class="contact-row reveal">
+      <a class="link" href="mailto:salom@nova-studio.uz">salom@nova-studio.uz</a>
+      <a class="link" href="tel:+998901234567">+998 90 123 45 67</a>
+      <a class="link" href="#">Instagram</a>
+      <a class="link" href="#">Behance</a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div>© 2026 NOVA Studio</div>
+  <div>Toshkent, O'zbekiston</div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+  /* ---------- Custom cursor ---------- */
+  const cursor = document.getElementById('cursor');
+  window.addEventListener('mousemove', e=>{
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .work-item').forEach(el=>{
+    el.addEventListener('mouseenter', ()=>cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', ()=>cursor.classList.remove('hover'));
+  });
+
+  /* ---------- Scroll reveal ---------- */
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+      }
+    });
+  }, { threshold: 0.18 });
+  document.querySelectorAll('.reveal').forEach((el, i)=>{
+    el.style.transitionDelay = (i % 5) * 0.08 + 's';
+    io.observe(el);
+  });
+
+  /* ---------- THREE.JS SCENE ---------- */
+  const canvas = document.getElementById('bg-canvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 9);
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  // Lighting
+  const ambient = new THREE.AmbientLight(0x9db3a8, 0.7);
+  scene.add(ambient);
+  const key = new THREE.PointLight(0xffb454, 2.4, 40);
+  key.position.set(6, 6, 8);
+  scene.add(key);
+  const rim = new THREE.PointLight(0x4fd1ae, 1.6, 40);
+  rim.position.set(-8, -4, -6);
+  scene.add(rim);
+
+  // Central hero object: icosahedron core + wireframe shell
+  const group = new THREE.Group();
+  scene.add(group);
+
+  const coreGeo = new THREE.IcosahedronGeometry(2.1, 1);
+  const coreMat = new THREE.MeshStandardMaterial({
+    color: 0x1c2721, metalness:0.35, roughness:0.25,
+    flatShading:true
+  });
+  const core = new THREE.Mesh(coreGeo, coreMat);
+  group.add(core);
+
+  const shellGeo = new THREE.IcosahedronGeometry(2.55, 1);
+  const shellMat = new THREE.MeshBasicMaterial({
+    color: 0xffb454, wireframe:true, transparent:true, opacity:0.35
+  });
+  const shell = new THREE.Mesh(shellGeo, shellMat);
+  group.add(shell);
+
+  const shell2Geo = new THREE.IcosahedronGeometry(3.1, 0);
+  const shell2Mat = new THREE.MeshBasicMaterial({
+    color: 0x4fd1ae, wireframe:true, transparent:true, opacity:0.18
+  });
+  const shell2 = new THREE.Mesh(shell2Geo, shell2Mat);
+  group.add(shell2);
+
+  // Particle field
+  const particleCount = 900;
+  const positions = new Float32Array(particleCount * 3);
+  for(let i=0;i<particleCount;i++){
+    positions[i*3]     = (Math.random()-0.5) * 30;
+    positions[i*3+1]   = (Math.random()-0.5) * 30;
+    positions[i*3+2]   = (Math.random()-0.5) * 30;
+  }
+  const particleGeo = new THREE.BufferGeometry();
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const particleMat = new THREE.PointsMaterial({
+    color: 0x9db3a8, size:0.045, transparent:true, opacity:0.55
+  });
+  const particles = new THREE.Points(particleGeo, particleMat);
+  scene.add(particles);
+
+  // Mouse parallax
+  let mouseX = 0, mouseY = 0;
+  window.addEventListener('mousemove', (e)=>{
+    mouseX = (e.clientX / window.innerWidth - 0.5);
+    mouseY = (e.clientY / window.innerHeight - 0.5);
+  });
+
+  // Scroll-driven camera movement
+  let scrollY = 0;
+  window.addEventListener('scroll', ()=>{
+    scrollY = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  });
+
+  function resize(){
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+  window.addEventListener('resize', resize);
+
+  const clock = new THREE.Clock();
+  function animate(){
+    const t = clock.getElapsedTime();
+
+    group.rotation.y = t * 0.18 + scrollY * 2.4;
+    group.rotation.x = t * 0.09 + scrollY * 1.2;
+    shell.rotation.y = -t * 0.12;
+    shell2.rotation.x = t * 0.07;
+
+    group.position.y = -scrollY * 3.2;
+    group.position.x = mouseX * 0.6;
+    group.position.z = mouseY * 0.3;
+
+    particles.rotation.y = t * 0.015;
+    particles.rotation.x = t * 0.008;
+
+    camera.position.x += (mouseX * 1.2 - camera.position.x) * 0.04;
+    camera.position.y += (-mouseY * 1.2 - camera.position.y) * 0.04;
+    camera.lookAt(0,0,0);
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
+  animate();
+</script>
+
+</body>
+</html>

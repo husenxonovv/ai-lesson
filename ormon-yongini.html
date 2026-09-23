@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ormon Yong'inlari — Rasmiy Ma'lumot Portali</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zilla+Slab:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep: #171b16;
+    --bg-panel: #202620;
+    --bg-panel-2: #262d25;
+    --line: #3a4238;
+    --text-main: #ece7d8;
+    --text-dim: #a9ad9e;
+    --ember: #d9631e;
+    --ember-soft: #ecb98c;
+    --forest: #5a7a52;
+    --forest-soft: #8fae7f;
+    --danger: #b23a2e;
+    --warn: #c98a2c;
+    --safe: #4c6b4f;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg-deep);
+    color:var(--text-main);
+    font-family:'Work Sans', sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3,h4{
+    font-family:'Zilla Slab', serif;
+    margin:0;
+    font-weight:600;
+    color:var(--text-main);
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+  /* Header */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(23,27,22,0.92);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:16px 28px;max-width:1120px;margin:0 auto;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-mark{width:34px;height:34px;flex-shrink:0;}
+  .brand-text{font-family:'Zilla Slab',serif;font-size:19px;font-weight:700;letter-spacing:0.2px;}
+  .brand-sub{font-size:11px;color:var(--text-dim);margin-top:1px;}
+  nav.links{display:flex;gap:28px;font-size:15px;}
+  nav.links a{text-decoration:none;color:var(--text-dim);border-bottom:1px solid transparent;padding-bottom:2px;transition:color .15s, border-color .15s;}
+  nav.links a:hover{color:var(--text-main);border-color:var(--ember);}
+  @media (max-width:720px){ nav.links{display:none;} }
+
+  /* Hero */
+  .hero{
+    padding:88px 0 72px;
+    position:relative;
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 700px 400px at 85% -10%, rgba(217,99,30,0.16), transparent 60%),
+      radial-gradient(ellipse 500px 300px at 5% 110%, rgba(90,122,82,0.14), transparent 60%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;display:grid;grid-template-columns:1.3fr 0.9fr;gap:56px;align-items:end;}
+  @media (max-width:860px){ .hero-inner{grid-template-columns:1fr;} }
+  .eyebrow-plain{font-size:14px;color:var(--ember-soft);margin-bottom:18px;}
+  .hero h1{font-size:52px;line-height:1.08;letter-spacing:-0.5px;max-width:16ch;}
+  .hero p.lead{margin-top:22px;font-size:17px;color:var(--text-dim);max-width:48ch;}
+  .hero-actions{margin-top:34px;display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:13px 24px;border-radius:3px;font-size:15px;font-weight:500;
+    text-decoration:none;cursor:pointer;border:1px solid transparent;
+    transition:transform .12s ease, background .15s ease;
+    font-family:'Work Sans',sans-serif;
+  }
+  .btn:active{transform:translateY(1px);}
+  .btn-primary{background:var(--ember);color:#1a1200;}
+  .btn-primary:hover{background:#e5762f;}
+  .btn-outline{border-color:var(--line);color:var(--text-main);background:transparent;}
+  .btn-outline:hover{border-color:var(--forest-soft);}
+
+  .hero-stat-card{
+    background:var(--bg-panel);border:1px solid var(--line);
+    padding:26px 24px;position:relative;
+  }
+  .hero-stat-card .num{font-family:'Zilla Slab',serif;font-size:44px;color:var(--ember-soft);line-height:1;}
+  .hero-stat-card .cap{margin-top:10px;font-size:14px;color:var(--text-dim);}
+  .hero-stat-card + .hero-stat-card{margin-top:16px;}
+  .stat-stack{display:flex;flex-direction:column;}
+
+  /* Sections generic */
+  section{padding:76px 0;border-bottom:1px solid var(--line);}
+  .section-head{max-width:60ch;margin-bottom:44px;}
+  .section-head .kicker{font-size:13px;color:var(--forest-soft);margin-bottom:10px;}
+  .section-head h2{font-size:34px;}
+  .section-head p{margin-top:14px;color:var(--text-dim);font-size:16px;}
+
+  /* Risk levels */
+  .risk-scale{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;border:1px solid var(--line);margin-bottom:40px;}
+  .risk-item{padding:20px 18px;background:var(--bg-panel);}
+  .risk-item .dot{width:12px;height:12px;border-radius:50%;margin-bottom:14px;}
+  .risk-item h4{font-size:16px;margin-bottom:8px;}
+  .risk-item p{font-size:13.5px;color:var(--text-dim);margin:0;}
+  @media (max-width:760px){ .risk-scale{grid-template-columns:1fr 1fr;} }
+
+  .cause-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .cause-card{background:var(--bg-panel);padding:24px 22px;}
+  .cause-card .idx{font-family:'Zilla Slab',serif;font-size:13px;color:var(--text-dim);margin-bottom:10px;}
+  .cause-card h4{font-size:16.5px;margin-bottom:8px;}
+  .cause-card p{font-size:13.5px;color:var(--text-dim);margin:0;}
+  @media (max-width:760px){ .cause-grid{grid-template-columns:1fr;} }
+
+  /* Map section */
+  .map-shell{
+    position:relative;border:1px solid var(--line);background:#10140f;
+    aspect-ratio:16/8.4;
+    background-image:url('https://upload.wikimedia.org/wikipedia/commons/e/ec/World_map_blank_without_borders.svg');
+    background-size:cover;background-position:center;
+    filter: saturate(1);
+  }
+  .map-tint{position:absolute;inset:0;background:linear-gradient(180deg, rgba(23,27,22,0.15), rgba(23,27,22,0.55));pointer-events:none;}
+  .marker{
+    position:absolute;transform:translate(-50%,-50%);
+    width:16px;height:16px;border-radius:50%;
+    background:var(--ember);border:2px solid #1a1200;
+    cursor:pointer;
+    box-shadow:0 0 0 0 rgba(217,99,30,0.6);
+    animation:pulse 2.6s infinite;
+  }
+  .marker.active{background:var(--forest-soft);}
+  .marker:hover{background:#ffb46a;}
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(217,99,30,0.45);}
+    70%{box-shadow:0 0 0 12px rgba(217,99,30,0);}
+    100%{box-shadow:0 0 0 0 rgba(217,99,30,0);}
+  }
+  .map-caption{margin-top:14px;font-size:13px;color:var(--text-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+
+  .country-panel{
+    margin-top:22px;border:1px solid var(--line);background:var(--bg-panel);
+    padding:0;display:none;overflow:hidden;
+  }
+  .country-panel.open{display:grid;grid-template-columns:220px 1fr;}
+  @media (max-width:700px){ .country-panel.open{grid-template-columns:1fr;} }
+  .cp-flag-side{
+    background:var(--bg-panel-2);
+    padding:26px;display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+    border-right:1px solid var(--line);
+  }
+  @media (max-width:700px){ .cp-flag-side{border-right:none;border-bottom:1px solid var(--line);flex-direction:row;align-items:center;} }
+  .cp-flag-side img{width:64px;border:1px solid var(--line);}
+  .cp-flag-side h3{font-size:20px;}
+  .cp-level{font-size:12.5px;padding:4px 9px;border-radius:2px;display:inline-block;font-weight:600;}
+  .cp-body{padding:26px 28px;}
+  .cp-body p{color:var(--text-dim);font-size:15px;margin:0 0 12px;}
+  .cp-body p:last-child{margin-bottom:0;}
+  .cp-body .cp-illus{width:100%;height:110px;margin-bottom:16px;}
+  .cp-close{background:none;border:none;color:var(--text-dim);cursor:pointer;font-size:13px;text-decoration:underline;padding:0;margin-top:4px;}
+
+  /* Safety section */
+  .safety-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;}
+  .safety-list li{
+    display:grid;grid-template-columns:28px 1fr;gap:16px;
+    padding:20px 0;border-top:1px solid var(--line);
+  }
+  .safety-list li:last-child{border-bottom:1px solid var(--line);}
+  .safety-list .mark{color:var(--forest-soft);font-family:'Zilla Slab',serif;font-size:15px;}
+  .safety-list h4{font-size:16px;margin-bottom:5px;}
+  .safety-list p{margin:0;color:var(--text-dim);font-size:14.5px;}
+
+  footer{padding:40px 0;}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--text-dim);}
+  footer .note{max-width:60ch;font-size:12.5px;color:#7d8274;margin-top:14px;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none">
+        <path d="M20 4C20 4 11 15 11 23a9 9 0 0018 0c0-4-2-7-4-10 0 3-2 5-4 5 1-4-1-9-1-14z" fill="#d9631e"/>
+        <path d="M20 14c0 0-3.5 5-3.5 8.5a3.5 3.5 0 007 0c0-1.5-.8-2.7-1.5-3.8 0 1.1-.8 1.9-1.5 1.9.4-1.5-.2-4.1-.5-6.6z" fill="#ecb98c"/>
+      </svg>
+      <div>
+        <div class="brand-text">Ormon Yong'inlari</div>
+        <div class="brand-sub">Rasmiy ma'lumot portali</div>
+      </div>
+    </div>
+    <nav class="links">
+      <a href="#malumot">Ma'lumot</a>
+      <a href="#sabablar">Sabablar</a>
+      <a href="#xarita">Xarita</a>
+      <a href="#xavfsizlik">Xavfsizlik</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-inner">
+    <div>
+      <div class="eyebrow-plain">Global monitoring va ogohlantirish tizimi</div>
+      <h1>Ormon yong'inlari haqida ishonchli ma'lumot</h1>
+      <p class="lead">Dunyoning turli mintaqalarida ormon yong'inlari xavfi yildan-yilga oshib bormoqda. Ushbu sahifa yong'in xavfi darajalari, uning sabablari va dunyo bo'yicha joriy holat haqida rasmiy ma'lumot beradi.</p>
+      <div class="hero-actions">
+        <a href="#malumot" class="btn btn-primary">Ma'lumot</a>
+        <a href="#xarita" class="btn btn-outline">Xaritani ko'rish</a>
+      </div>
+    </div>
+    <div class="stat-stack">
+      <div class="hero-stat-card">
+        <div class="num">4–5 mln</div>
+        <div class="cap">gektar o'rmon har yili yong'in tufayli yo'qolishi taxmin qilinadi — mintaqadan mintaqaga farq qiladi</div>
+      </div>
+      <div class="hero-stat-card">
+        <div class="num">90%</div>
+        <div class="cap">yong'inlarning aksariyati inson faoliyati bilan bog'liq sabablardan kelib chiqadi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="malumot">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Ma'lumot</div>
+      <h2>Yong'in xavfi darajalari</h2>
+      <p>Xavf darajasi harorat, namlik, shamol tezligi va o'simlik qurg'oqchiligiga qarab belgilanadi. Quyida to'rt bosqichli tizim keltirilgan.</p>
+    </div>
+    <div class="risk-scale">
+      <div class="risk-item">
+        <div class="dot" style="background:var(--safe);"></div>
+        <h4>Past xavf</h4>
+        <p>Namlik yetarli, o'simlik yashil. Yong'in tarqalishi sekin va cheklangan.</p>
+      </div>
+      <div class="risk-item">
+        <div class="dot" style="background:var(--forest-soft);"></div>
+        <h4>O'rtacha xavf</h4>
+        <p>Quruq davrlar boshlanadi. Ochiq olov bilan ehtiyot bo'lish tavsiya etiladi.</p>
+      </div>
+      <div class="risk-item">
+        <div class="dot" style="background:var(--warn);"></div>
+        <h4>Yuqori xavf</h4>
+        <p>Kuchli shamol va past namlik. Yong'in tez tarqaladi, nazorat qilish qiyinlashadi.</p>
+      </div>
+      <div class="risk-item">
+        <div class="dot" style="background:var(--danger);"></div>
+        <h4>O'ta yuqori xavf</h4>
+        <p>Ekstremal issiqlik va qurg'oqchilik. Kichik uchqun ham katta yong'inga aylanishi mumkin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="sabablar">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Sabablar</div>
+      <h2>Ormon yong'inlari nimadan kelib chiqadi</h2>
+      <p>Yong'inlarning katta qismi tabiiy emas, balki inson e'tiborsizligi yoki ataylab qilingan harakatlar natijasida yuzaga keladi.</p>
+    </div>
+    <div class="cause-grid">
+      <div class="cause-card">
+        <div class="idx">01</div>
+        <h4>Inson e'tiborsizligi</h4>
+        <p>O'chirilmagan gulxan, tashlangan chekilgan sigareta, qishloq xo'jaligida nazoratsiz kuydirish.</p>
+      </div>
+      <div class="cause-card">
+        <div class="idx">02</div>
+        <h4>Chaqmoq urishi</h4>
+        <p>Quruq momaqaldiroqlarda chaqmoq quruq o'simlikni yondirib, tabiiy yong'inni boshlab yuborishi mumkin.</p>
+      </div>
+      <div class="cause-card">
+        <div class="idx">03</div>
+        <h4>Iqlim o'zgarishi</h4>
+        <p>Uzoq davom etgan issiqlik to'lqinlari va qurg'oqchilik o'simlikni yonuvchan holatga keltiradi.</p>
+      </div>
+      <div class="cause-card">
+        <div class="idx">04</div>
+        <h4>Elektr tarmoqlari</h4>
+        <p>Shamolda uzilgan elektr simlari uchqun chiqarib, quruq o't-o'lanni yondirishi mumkin.</p>
+      </div>
+      <div class="cause-card">
+        <div class="idx">05</div>
+        <h4>Ataylab yoqish</h4>
+        <p>Ba'zi hollarda yer tozalash yoki boshqa maqsadlar uchun ataylab olov qo'yiladi va nazoratdan chiqadi.</p>
+      </div>
+      <div class="cause-card">
+        <div class="idx">06</div>
+        <h4>Vulqon faolligi</h4>
+        <p>Kamdan-kam hollarda lava yoki issiq kul atrofdagi o'rmonni tutantirishi mumkin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="xarita">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Interaktiv xarita</div>
+      <h2>Dunyo bo'yicha yong'in xavfi yuqori hududlar</h2>
+      <p>Xaritadagi nuqtalardan birini bosing — o'sha davlatning bayrog'i va ormon yong'inlari holati haqida qisqacha ma'lumot chiqadi.</p>
+    </div>
+
+    <div class="map-shell" id="mapShell">
+      <div class="map-tint"></div>
+      <!-- markers injected by JS -->
+    </div>
+    <div class="map-caption">
+      <span>Manba: milliy o'rmon xo'jaligi agentliklari va xalqaro monitoring tashkilotlarining umumlashtirilgan ma'lumotlari</span>
+      <span id="selectedLabel">Hech qanday davlat tanlanmagan</span>
+    </div>
+
+    <div class="country-panel" id="countryPanel">
+      <div class="cp-flag-side">
+        <img id="cpFlag" src="" alt="">
+        <div>
+          <h3 id="cpName"></h3>
+          <span class="cp-level" id="cpLevel"></span>
+        </div>
+      </div>
+      <div class="cp-body">
+        <svg class="cp-illus" id="cpIllus" viewBox="0 0 400 110"></svg>
+        <p id="cpText1"></p>
+        <p id="cpText2"></p>
+        <button class="cp-close" onclick="closePanel()">Panelni yopish</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="xavfsizlik">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="kicker">Xavfsizlik choralari</div>
+      <h2>Yong'in xavfi yuqori bo'lgan davrda nima qilish kerak</h2>
+    </div>
+    <ul class="safety-list">
+      <li>
+        <span class="mark">01</span>
+        <div>
+          <h4>Ochiq olovdan voz keching</h4>
+          <p>Quruq o'simlik yaqinida gulxan yoqmang, chekilgan sigaretani to'liq o'chiring.</p>
+        </div>
+      </li>
+      <li>
+        <span class="mark">02</span>
+        <div>
+          <h4>Rasmiy ogohlantirishlarni kuzatib boring</h4>
+          <p>Mahalliy hokimiyat yoki o'rmon xo'jaligi agentligining xavf darajasi haqidagi e'lonlariga e'tibor bering.</p>
+        </div>
+      </li>
+      <li>
+        <span class="mark">03</span>
+        <div>
+          <h4>Evakuatsiya yo'lini oldindan biling</h4>
+          <p>Yong'in xavfi yuqori hududda yashasangiz, chiqish yo'llari va yig'ilish nuqtalarini oldindan aniqlab qo'ying.</p>
+        </div>
+      </li>
+      <li>
+        <span class="mark">04</span>
+        <div>
+          <h4>Tutun payqasangiz, darhol xabar bering</h4>
+          <p>Kichik tutun ham katta yong'inning boshlanishi bo'lishi mumkin — tegishli xizmatga zudlik bilan murojaat qiling.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <div>Ormon Yong'inlari — Ma'lumot Portali</div>
+      <div class="note">Ushbu sahifa umumiy ta'lim maqsadida tayyorlangan bo'lib, real vaqtdagi favqulodda ogohlantirish xizmati emas. Aniq va joriy xavf darajasi bo'yicha o'z mintaqangizdagi rasmiy organlarga murojaat qiling.</div>
+    </div>
+    <div>© 2026</div>
+  </div>
+</footer>
+
+<script>
+const countries = [
+  {
+    code:"ru", name:"Rossiya", lat:60, lon:95, level:"Yuqori", color:"var(--warn)",
+    t1:"Sibirning katta o'rmon massivlari har yili yoz oylarida keng ko'lamli yong'inlarga duch keladi, ayniqsa uzoq va qiyin yetib boriladigan hududlarda.",
+    t2:"Issiq va quruq yozlar, shuningdek chaqmoq urishlari yong'inlarning asosiy tabiiy sabablaridan biri hisoblanadi."
+  },
+  {
+    code:"us", name:"Amerika Qo'shma Shtatlari", lat:37, lon:-120, level:"O'ta yuqori", color:"var(--danger)",
+    t1:"Kaliforniya va G'arbiy shtatlarda uzoq davom etgan qurg'oqchilik va kuchli shamollar yong'inlarning tez tarqalishiga sabab bo'ladi.",
+    t2:"Mahalliy hokimiyatlar har yili yozgi mavsumda maxsus xavf ogohlantirish tizimlarini joriy etadi."
+  },
+  {
+    code:"ca", name:"Kanada", lat:56, lon:-106, level:"Yuqori", color:"var(--warn)",
+    t1:"Kanadaning shimoliy o'rmonlari so'nggi yillarda rekord darajadagi yong'inlarni boshdan kechirdi, tutun hatto qo'shni davlatlarga ham yetib bordi.",
+    t2:"Issiqlik to'lqinlari va quruq momaqaldiroqlar asosiy omillar hisoblanadi."
+  },
+  {
+    code:"br", name:"Braziliya", lat:-5, lon:-60, level:"Yuqori", color:"var(--warn)",
+    t1:"Amazoniya yomg'ir o'rmonlarida yong'inlarning aksariyati qishloq xo'jaligi uchun yer tozalash maqsadida ataylab qo'yiladi.",
+    t2:"Bu nafaqat mahalliy ekotizimga, balki global iqlimga ham ta'sir ko'rsatadi."
+  },
+  {
+    code:"au", name:"Avstraliya", lat:-25, lon:135, level:"O'ta yuqori", color:"var(--danger)",
+    t1:"Avstraliyaning quruq iqlimi va evkalipt o'rmonlari juda tez yonuvchan bo'lib, buta yong'inlari mavsumiy tarzda takrorlanib turadi.",
+    t2:"Xavf darajasi mamlakat bo'ylab kunlik tarzda e'lon qilinadi va aholi shunga qarab harakat qiladi."
+  },
+  {
+    code:"id", name:"Indoneziya", lat:-2, lon:118, level:"Yuqori", color:"var(--warn)",
+    t1:"Torf botqoqlik yerlarida yer tozalash uchun yoqilgan olov chuqur torf qatlamlarida uzoq vaqt yashirin yonib, keng tutun bulutlarini hosil qiladi.",
+    t2:"Quruq mavsumda bu yong'inlar mintaqaviy havo sifatiga jiddiy ta'sir ko'rsatadi."
+  },
+  {
+    code:"gr", name:"Gretsiya", lat:39, lon:22, level:"Yuqori", color:"var(--warn)",
+    t1:"O'rta dengiz iqlimi, issiq va quruq yozlar Gretsiyaning tog'li o'rmon hududlarini yong'inga moyil qiladi.",
+    t2:"Kuchli meltem shamollari yong'inning bir necha soat ichida keng maydonga tarqalishiga olib kelishi mumkin."
+  },
+  {
+    code:"pt", name:"Portugaliya", lat:39.5, lon:-8, level:"Yuqori", color:"var(--warn)",
+    t1:"Evkalipt o'rmonzorlari tez yonuvchan bo'lgani uchun Portugaliya Yevropada eng ko'p yong'in ro'y beradigan davlatlardan biri hisoblanadi.",
+    t2:"Yozgi issiqlik to'lqinlari davrida favqulodda xavf darajasi tez-tez e'lon qilinadi."
+  },
+  {
+    code:"tr", name:"Turkiya", lat:39, lon:35, level:"O'rtacha", color:"var(--forest-soft)",
+    t1:"Turkiyaning janubiy va g'arbiy qirg'oq bo'yidagi qarag'ay o'rmonlari yoz oylarida yong'in xavfiga ko'proq duch keladi.",
+    t2:"Issiq shamollar va turistik faollik ba'zan yong'in xavfini oshiradigan omillar sifatida qayd etiladi."
+  },
+  {
+    code:"es", name:"Ispaniya", lat:40, lon:-3.7, level:"O'rtacha", color:"var(--forest-soft)",
+    t1:"Ispaniyaning markaziy va janubiy hududlarida uzoq davom etgan qurg'oqchilik o'simlikni juda quruq holatga keltiradi.",
+    t2:"Milliy o'rmon xo'jaligi xizmati yozgi mavsumda kunlik xavf xaritasini e'lon qilib boradi."
+  }
+];
+
+const shell = document.getElementById('mapShell');
+countries.forEach((c, i) => {
+  const x = ((c.lon + 180) / 360) * 100;
+  const y = ((90 - c.lat) / 180) * 100;
+  const el = document.createElement('div');
+  el.className = 'marker';
+  el.style.left = x + '%';
+  el.style.top = y + '%';
+  el.title = c.name;
+  el.dataset.idx = i;
+  el.addEventListener('click', () => selectCountry(i, el));
+  shell.appendChild(el);
+});
+
+function levelBg(level){
+  if(level === "O'ta yuqori") return "var(--danger)";
+  if(level === "Yuqori") return "var(--warn)";
+  if(level === "O'rtacha") return "var(--forest-soft)";
+  return "var(--safe)";
+}
+
+function drawIllustration(svg, level){
+  svg.innerHTML = '';
+  const ns = "http://www.w3.org/2000/svg";
+  const bg = document.createElementNS(ns,"rect");
+  bg.setAttribute("width","400"); bg.setAttribute("height","110"); bg.setAttribute("fill","#171b16");
+  svg.appendChild(bg);
+  // ground
+  const ground = document.createElementNS(ns,"rect");
+  ground.setAttribute("x","0"); ground.setAttribute("y","86"); ground.setAttribute("width","400"); ground.setAttribute("height","24"); ground.setAttribute("fill","#2a3025");
+  svg.appendChild(ground);
+  // trees
+  const treeColor = (level === "O'ta yuqori" || level === "Yuqori") ? "#4a3a2a" : "#5a7a52";
+  for(let i=0;i<7;i++){
+    const x = 20 + i*54;
+    const tri = document.createElementNS(ns,"polygon");
+    const h = 40 + (i%3)*8;
+    tri.setAttribute("points", `${x},${86-h} ${x-16},86 ${x+16},86`);
+    tri.setAttribute("fill", (i%2===0 && (level==="O'ta yuqori"||level==="Yuqori")) ? "#7a4a1e" : treeColor);
+    svg.appendChild(tri);
+  }
+  // flame accents for higher risk
+  if(level === "O'ta yuqori" || level === "Yuqori"){
+    for(let i=0;i<4;i++){
+      const x = 60 + i*90;
+      const flame = document.createElementNS(ns,"path");
+      flame.setAttribute("d", `M${x} 86 C ${x-10} 70, ${x+4} 62, ${x} 50 C ${x-4} 62, ${x+10} 70, ${x} 86 Z`);
+      flame.setAttribute("fill", "#d9631e");
+      flame.setAttribute("opacity", "0.9");
+      svg.appendChild(flame);
+    }
+  }
+}
+
+let currentActive = null;
+function selectCountry(i, el){
+  const c = countries[i];
+  if(currentActive) currentActive.classList.remove('active');
+  el.classList.add('active');
+  currentActive = el;
+
+  document.getElementById('selectedLabel').textContent = c.name + " tanlandi";
+  const panel = document.getElementById('countryPanel');
+  panel.classList.add('open');
+  document.getElementById('cpFlag').src = `https://flagcdn.com/w160/${c.code}.png`;
+  document.getElementById('cpFlag').alt = c.name + " bayrog'i";
+  document.getElementById('cpName').textContent = c.name;
+  const lvl = document.getElementById('cpLevel');
+  lvl.textContent = "Xavf darajasi: " + c.level;
+  lvl.style.background = levelBg(c.level);
+  lvl.style.color = "#171b16";
+  document.getElementById('cpText1').textContent = c.t1;
+  document.getElementById('cpText2').textContent = c.t2;
+  drawIllustration(document.getElementById('cpIllus'), c.level);
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function closePanel(){
+  document.getElementById('countryPanel').classList.remove('open');
+  document.getElementById('selectedLabel').textContent = "Hech qanday davlat tanlanmagan";
+  if(currentActive){ currentActive.classList.remove('active'); currentActive = null; }
+}
+</script>
+
+</body>
+</html>
